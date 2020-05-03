@@ -14,7 +14,7 @@ Authors@R:
 Description: This package allows the user to look for, find and make queries of one or several variables from the voluminous HDNG database containing quantitative information about Dutch municipalities from about 1800 to the 1980's. The database is too large to efficiently be handled as an object of its own, therefore this set of functions have been created to assist the user in making more precise queries and extracting the information that he/she wants. The type of query can be specified entirely by the user. The package is 'typo robust' for a large part. Source data: https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/RPBVK4 
 License: CC0
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Depends: 
