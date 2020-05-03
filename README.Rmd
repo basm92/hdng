@@ -39,4 +39,4 @@ library(hdng)
 
 ## Future work
 
-I plan to include a function that takes as input variable names (or closest matches to them), and as output variable codes, so as not to frustrate the user to always look for variable codes to enter as arguments to `hdng_data_get`. Alternatively, I might start to work on an extract function that takes names, not codes as input. Thank you for reading!
+I plan to include a function that takes as input variable names (or closest matches to them), and as output variable codes, so as not to frustrate the user to always look for variable codes to enter as arguments to `hdng_data_get`. Alternatively, I might start to work on an extract function that takes names, not codes as input. I also want to integrate searches on the basis of province. Thank you for reading!
