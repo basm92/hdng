@@ -381,19 +381,141 @@ summary {
 <div id="demonstration" class="section level2">
 <h2>Demonstration</h2>
 <p>The package can be installed and loaded via:</p>
-<pre class="r"><code>devtools::install_github(&quot;basm92/hdng&quot;)
-
-library(hdng)</code></pre>
+<pre class="r"><code>devtools::install_github(&quot;basm92/hdng&quot;)</code></pre>
+<pre class="r"><code>library(hdng)</code></pre>
+<p>Depending on your machine, the installation might take a while because the data is lazy loading (it is a lot of data).</p>
 </div>
 <div id="search-for-your-variables" class="section level2">
 <h2>Search for your variables</h2>
+<p>Generally, you can use <code>hdng_names_cats()</code> to look for specific data. An empty call gives you all available categories, wheras a call with one of the categories gives you a data.frame containing the availability of all variables within the time frame you specified:</p>
+<pre class="r"><code>hdng_names_cats()</code></pre>
+<pre><code>##  [1] &quot;Beroepen&quot;      &quot;Bedrijvigheid&quot; &quot;Godsdienst&quot;    &quot;District&quot;     
+##  [5] &quot;Bevolking&quot;     &quot;Politiek&quot;      &quot;Onderwijs&quot;     &quot;Welvaart&quot;     
+##  [9] &quot;Voorzieningen&quot; &quot;Woningen&quot;      &quot;Openheid&quot;</code></pre>
+<pre class="r"><code>hdng_names_cats(&quot;Beroepen&quot;) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 12
+##   descr main.cat meaning var   `1889` `1899` `1930` `1933` `1935` `1947` `1960`
+##   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+## 1 Aard… a        Beroep… aaa1       1      1      1      0      0      0      0
+## 2 Aard… a        Beroep… aab1       1      1      1      0      0      0      0
+## 3 Aard… a        Beroep… aac1       1      1      1      0      0      0      0
+## 4 Aard… a        Beroep… aad3       1      0      0      0      0      0      0
+## 5 Aard… a        Beroep… aax1       1      1      1      0      0      0      0
+## 6 Aard… a        Beroep… aax2       1      1      1      0      0      0      0
+## # … with 1 more variable: `1971` &lt;int&gt;</code></pre>
+<pre class="r"><code>hdng_names_cats(&quot;Beroepen&quot;, from = 1870 ,to = 1899) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   descr                   main.cat meaning  var   `1889` `1899`
+##   &lt;chr&gt;                   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;  &lt;int&gt;  &lt;int&gt;
+## 1 Aardewerk enz. Pos.A, M a        Beroepen aaa1       1      1
+## 2 Aardewerk enz. Pos.B, M a        Beroepen aab1       1      1
+## 3 Aardewerk enz. Pos.C, M a        Beroepen aac1       1      1
+## 4 Aardewerk enz. Pos.D    a        Beroepen aad3       1      0
+## 5 Aardewerk enz., M       a        Beroepen aax1       1      1
+## 6 Aardewerk enz., V       a        Beroepen aax2       1      1</code></pre>
+<p>You can also apply a ‘less strict’ filter to the data. By default, the query filters the data to variables that are available at least once in the indicated period. You can override this option by specifying <code>show.only.available = FALSE</code>.</p>
+<pre class="r"><code>hdng_names_cats(&quot;Welvaart&quot;, from = 1880, to = 1940) </code></pre>
+<pre><code>## # A tibble: 12 x 8
+##    descr                      main.cat meaning var   `1889` `1933` `1934` `1935`
+##    &lt;chr&gt;                      &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+##  1 Aantal aansluitingen elec… h        Welvaa… aael       0      0      1      0
+##  2 Aantal aansluitingen gas   h        Welvaa… aaga       0      0      1      0
+##  3 Aantal aansluitingen tele… h        Welvaa… aate       0      0      0      1
+##  4 Aantal aangemelde radio o… h        Welvaa… aaro       0      0      0      1
+##  5 Aantal op distributiecent… h        Welvaa… adar       0      0      0      1
+##  6 Aantal personenautos       h        Welvaa… aper       0      0      0      1
+##  7 Aantal vrachtautos         h        Welvaa… avra       0      0      0      1
+##  8 Aantal motorbussen         h        Welvaa… amot       0      0      0      1
+##  9 Aantal motorrijtuigen op … h        Welvaa… amtm       0      0      0      1
+## 10 Aandeel der gemeente in s… h        Welvaa… agpb       1      0      0      0
+## 11 % aangeslagenen Rijksinko… h        Welvaa… prbd       0      1      0      0
+## 12 % aangesl. Vermogensbel. … h        Welvaa… pvar       0      0      1      0</code></pre>
+<pre class="r"><code>hdng_names_cats(&quot;Welvaart&quot;, from = 1880, to = 1940, show.only.available = F) </code></pre>
+<pre><code>## # A tibble: 23 x 65
+##    descr main.cat meaning var   `1880` `1881` `1882` `1883` `1884` `1885` `1886`
+##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+##  1 Aant… h        Welvaa… aael       0      0      0      0      0      0      0
+##  2 Aant… h        Welvaa… aaga       0      0      0      0      0      0      0
+##  3 Aant… h        Welvaa… aate       0      0      0      0      0      0      0
+##  4 Aant… h        Welvaa… aaro       0      0      0      0      0      0      0
+##  5 Aant… h        Welvaa… adar       0      0      0      0      0      0      0
+##  6 Aant… h        Welvaa… aper       0      0      0      0      0      0      0
+##  7 Aant… h        Welvaa… avra       0      0      0      0      0      0      0
+##  8 Aant… h        Welvaa… amot       0      0      0      0      0      0      0
+##  9 Aant… h        Welvaa… amtm       0      0      0      0      0      0      0
+## 10 Aand… h        Welvaa… agpb       0      0      0      0      0      0      0
+## # … with 13 more rows, and 54 more variables: `1887` &lt;int&gt;, `1888` &lt;int&gt;,
+## #   `1889` &lt;int&gt;, `1890` &lt;int&gt;, `1891` &lt;int&gt;, `1892` &lt;int&gt;, `1893` &lt;int&gt;,
+## #   `1894` &lt;int&gt;, `1895` &lt;int&gt;, `1896` &lt;int&gt;, `1897` &lt;int&gt;, `1898` &lt;int&gt;,
+## #   `1899` &lt;int&gt;, `1900` &lt;int&gt;, `1901` &lt;int&gt;, `1902` &lt;int&gt;, `1903` &lt;int&gt;,
+## #   `1904` &lt;int&gt;, `1905` &lt;int&gt;, `1906` &lt;int&gt;, `1907` &lt;int&gt;, `1908` &lt;int&gt;,
+## #   `1909` &lt;int&gt;, `1910` &lt;int&gt;, `1911` &lt;int&gt;, `1912` &lt;int&gt;, `1913` &lt;int&gt;,
+## #   `1914` &lt;int&gt;, `1915` &lt;int&gt;, `1916` &lt;int&gt;, `1917` &lt;int&gt;, `1918` &lt;int&gt;,
+## #   `1919` &lt;int&gt;, `1920` &lt;int&gt;, `1921` &lt;int&gt;, `1922` &lt;int&gt;, `1923` &lt;int&gt;,
+## #   `1924` &lt;int&gt;, `1925` &lt;int&gt;, `1926` &lt;int&gt;, `1927` &lt;int&gt;, `1928` &lt;int&gt;,
+## #   `1929` &lt;int&gt;, `1930` &lt;int&gt;, `1931` &lt;int&gt;, `1932` &lt;int&gt;, `1933` &lt;int&gt;,
+## #   `1934` &lt;int&gt;, `1935` &lt;int&gt;, `1936` &lt;int&gt;, `1937` &lt;int&gt;, `1938` &lt;int&gt;,
+## #   `1939` &lt;int&gt;, `1940` &lt;int&gt;</code></pre>
+<p>You can also search for a specific term using the function <code>closest_matches</code>. By default, it returns variable names. If you want to see names, set <code>variable.names</code> to <code>TRUE</code>.</p>
+<pre class="r"><code>closest_matches(&quot;aantal autos&quot;, &quot;Welvaart&quot;, n = 20)</code></pre>
+<pre><code>##  [1] &quot;avra&quot; &quot;aper&quot; &quot;amot&quot; &quot;ahcg&quot; &quot;aaga&quot; &quot;ahbk&quot; &quot;ahwg&quot; &quot;aate&quot; &quot;aael&quot; &quot;tahe&quot;
+## [11] &quot;zofk&quot; &quot;aaro&quot; &quot;amtm&quot; &quot;ahvg&quot; &quot;adar&quot; &quot;gisg&quot; &quot;falw&quot; &quot;agpb&quot; &quot;agpb&quot; &quot;hamt&quot;</code></pre>
+<pre class="r"><code>closest_matches(&quot;aantal autos&quot;, &quot;Welvaart&quot;, variable.names = TRUE)</code></pre>
+<pre><code>##  [1] &quot;Aantal vrachtautos&quot;                 &quot;Aantal personenautos&quot;              
+##  [3] &quot;Aantal motorbussen&quot;                 &quot;Aantal ha. cultuurgrond&quot;           
+##  [5] &quot;Aantal aansluitingen gas&quot;           &quot;Aantal ha. bebouwde kom&quot;           
+##  [7] &quot;Aantal ha. woeste grond&quot;            &quot;Aantal aansluitingen telefoon&quot;     
+##  [9] &quot;Aantal aansluitingen electriciteit&quot; &quot;Totaal aantal ha. (excl. kwelders)&quot;</code></pre>
 </div>
 <div id="execute-the-query" class="section level2">
 <h2>Execute the query</h2>
+<p>Finally, you enter a number of variable names into <code>hdng_get_data</code> to retrieve a data.frame consisting of the actual variables:</p>
+<pre class="r"><code>#Example 1
+variables &lt;- closest_matches(&quot;aantal autos&quot;, &quot;Welvaart&quot;, n = 3)
+
+hdng_get_data(variables, gemeenten = c(&quot;Amsterdam&quot;, &quot;Rotterdam&quot;,
+                                       &quot;Utrecht&quot;, &quot;'s Gravenhage&quot;),
+              col.names = TRUE)</code></pre>
+<pre><code>## # A tibble: 4 x 8
+##   cbsnr naam  acode main.cat  year `Aantal vrachta… `Aantal persone…
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1   344 UTRE… 10722 h         1935             1108             1892
+## 2   363 AMST… 11150 h         1935             3885             9709
+## 3   518 'S G… 11434 h         1935             2563             6973
+## 4   599 ROTT… 10345 h         1935             2770             4315
+## # … with 1 more variable: `Aantal motorbussen` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#Example 2
+hdng_names_cats(&quot;Beroepen&quot;) -&gt; query
+
+query$var[1:10] -&gt; variables2       #Select only 10 variables
+
+hdng_get_data(variables2, gemeenten = c(&quot;Groningen&quot;, &quot;Leeuwarden&quot;, &quot;Assen&quot;, &quot;Zwolle&quot;),
+                col.names = TRUE) </code></pre>
+<pre><code>## # A tibble: 12 x 15
+##    cbsnr naam  acode main.cat  year `Aardewerk enz.… `Aardewerk enz.…
+##    &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+##  1    14 GRON… 10426 a         1889               30                1
+##  2    14 GRON… 10426 a         1899               11                2
+##  3    14 GRON… 10426 a         1930                7                7
+##  4    80 LEEU… 11228 a         1889               14                0
+##  5    80 LEEU… 11228 a         1899                8                0
+##  6    80 LEEU… 11228 a         1930                3                2
+##  7   106 ASSEN 10522 a         1889                3                0
+##  8   106 ASSEN 10522 a         1899                0                0
+##  9   106 ASSEN 10522 a         1930                0                1
+## 10   193 ZWOL… 10093 a         1889                7                0
+## 11   193 ZWOL… 10093 a         1899                4                1
+## 12   193 ZWOL… 10093 a         1930                0                3
+## # … with 8 more variables: `Aardewerk enz. Pos.C, M` &lt;dbl&gt;, `Aardewerk enz.
+## #   Pos.D` &lt;dbl&gt;, `Aardewerk enz., M` &lt;dbl&gt;, `Aardewerk enz., V` &lt;dbl&gt;,
+## #   `Drukkersbedrijven Pos.A, M` &lt;dbl&gt;, `Drukkersbedrijven Pos.B, M` &lt;dbl&gt;,
+## #   `Drukkersbedrijven Pos.C, M` &lt;dbl&gt;, `Drukkersbedrijven Pos.D, M` &lt;dbl&gt;</code></pre>
 </div>
 <div id="future-work" class="section level2">
 <h2>Future work</h2>
-<p>I plan to include a function that takes as input variable names (or closest matches to them), and as output variable codes, so as not to frustrate the user to always look for variable codes to enter as arguments to <code>hdng_data_get</code>. Alternatively, I might start to work on an extract function that takes names, not codes as input. I also want to integrate searches on the basis of province. Thank you for reading!</p>
+<p>I plan to include a function that takes as input variable names (or closest matches to them), and as output variable codes, so as not to frustrate the user to always look for variable codes to enter as arguments to <code>hdng_data_get</code>. Alternatively, I might start to work on an extract function that takes names, not codes as input. I also want to integrate searches on the basis of province. Let me know if you have any suggestions. Thank you for reading!</p>
 </div>
 
 

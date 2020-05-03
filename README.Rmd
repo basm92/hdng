@@ -27,16 +27,74 @@ The package can be installed and loaded via:
 
 ```{r install, eval = FALSE}
 devtools::install_github("basm92/hdng")
+```
 
+```{r library, message = FALSE}
 library(hdng)
 ```
 
+Depending on your machine, the installation might take a while because the data is lazy loading (it is a lot of data).
+
 ## Search for your variables
 
+Generally, you can use `hdng_names_cats()` to look for specific data. An empty call gives you all available categories, wheras a call with one of the categories gives you a data.frame containing the availability of all variables within the time frame you specified:
 
+```{r categories}
+hdng_names_cats()
+
+```
+
+```{r categories 2}
+hdng_names_cats("Beroepen") %>%
+  head()
+
+
+hdng_names_cats("Beroepen", from = 1870 ,to = 1899) %>%
+  head()
+```
+
+You can also apply a 'less strict' filter to the data. By default, the query filters the data to variables that are available at least once in the indicated period. You can override this option by specifying `show.only.available = FALSE`.
+
+```{r cat 3}
+
+hdng_names_cats("Welvaart", from = 1880, to = 1940) 
+
+
+hdng_names_cats("Welvaart", from = 1880, to = 1940, show.only.available = F) 
+```
+
+
+You can also search for a specific term using the function `closest_matches`. By default, it returns variable names. If you want to see names, set `variable.names` to `TRUE`. 
+
+```{r demo closest matches}
+closest_matches("aantal autos", "Welvaart", n = 20)
+
+closest_matches("aantal autos", "Welvaart", variable.names = TRUE)
+```
 ## Execute the query
 
+Finally, you enter a number of variable names into `hdng_get_data` to retrieve a data.frame consisting of the actual variables: 
+
+
+```{r}
+
+#Example 1
+variables <- closest_matches("aantal autos", "Welvaart", n = 3)
+
+hdng_get_data(variables, gemeenten = c("Amsterdam", "Rotterdam",
+                                       "Utrecht", "'s Gravenhage"),
+              col.names = TRUE)
+
+#Example 2
+hdng_names_cats("Beroepen") -> query
+
+query$var[1:10] -> variables2       #Select only 10 variables
+
+hdng_get_data(variables2, gemeenten = c("Groningen", "Leeuwarden", "Assen", "Zwolle"),
+                col.names = TRUE) 
+
+```
 
 ## Future work
 
-I plan to include a function that takes as input variable names (or closest matches to them), and as output variable codes, so as not to frustrate the user to always look for variable codes to enter as arguments to `hdng_data_get`. Alternatively, I might start to work on an extract function that takes names, not codes as input. I also want to integrate searches on the basis of province. Thank you for reading!
+I plan to include a function that takes as input variable names (or closest matches to them), and as output variable codes, so as not to frustrate the user to always look for variable codes to enter as arguments to `hdng_data_get`. Alternatively, I might start to work on an extract function that takes names, not codes as input. I also want to integrate searches on the basis of province. Let me know if you have any suggestions. Thank you for reading!
