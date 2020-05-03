@@ -1,10 +1,10 @@
-#From raw data to 'lijst' 
+#From raw data to 'lijst'
 #Source: these files
 #https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/RPBVK4
 
 #put the data in new dir, then proceed
 
-#Packages
+#Load packages
 library(readxl)
 library(janitor)
 library(stringr)
@@ -20,7 +20,7 @@ files <- list.files(pattern = "hdng[0-9]+.xls")
 lijst <- NULL
 
 for(i in 1:length(files)) {
-    lijst[[i]] <- read_xls(files[i], 
+    lijst[[i]] <- read_xls(files[i],
                            skip = 1)
 }
 
@@ -29,7 +29,7 @@ lijst <- lijst %>%
   lapply(clean_names)
 
 lijst <- lijst %>%
-  lapply(pivot_longer, -c("cbsnr", "naam", "acode")) 
+  lapply(pivot_longer, -c("cbsnr", "naam", "acode"))
 
 lijst <- lijst %>%
   purrr::reduce(rbind)
@@ -40,8 +40,8 @@ lijst <- lijst %>%
 
 lijst <- lijst %>%
   distinct()
-  
-lijst <- lijst %>% 
+
+lijst <- lijst %>%
   pivot_wider(names_from = var, values_from = value)
 
 #Use this to include data in package
