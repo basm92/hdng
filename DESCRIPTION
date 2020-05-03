@@ -1,0 +1,27 @@
+Package: hdng
+Title: HDNG: Efficiently make queries to the HDNG database containing historical information about Dutch municipalities.
+Version: 0.0.0.9000
+Authors@R: 
+    c(
+      person(given = "Bas",
+             family = "Machielsen",
+             role = "cre",
+             email = "a.h.machielsen@uu.nl"),
+      person(given = "Bas",
+             family = "Machielsen",
+             role = "aut",
+             email = "a.h.machielsen@uu.nl"))
+Description: This package allows the user to look for, find and make queries of one or several variables from the voluminous HDNG database containing quantitative information about Dutch municipalities from about 1800 to the 1980's. The database is too large to efficiently be handled as an object of its own, therefore this set of functions have been created to assist the user in making more precise queries and extracting the information that he/she wants. The type of query can be specified entirely by the user. The package is 'typo robust' for a large part. Source data: https://datasets.iisg.amsterdam/dataset.xhtml?persistentId=hdl:10622/RPBVK4 
+License: CC0
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Depends: 
+    R (>= 2.10),
+    dplyr
+Imports: 
+    purrr,
+    stringdist
+Suggests: 
+    magrittr
