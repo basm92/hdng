@@ -18,7 +18,7 @@ output:
   - `closest_matches`: gives the user the closest matches (according to string distance) of one or more particular searches. This allows the user to quickly find variables of interest without having to browse through categories. Also supports 'within-category' search. The particular kind of string distance can be customized. 
   
   - `hdng_data_get`: function allowing the user to extract the data. It takes as input variable codes, and returns a data.frame as output containing the variables. Many options customizable. 
-  
+
 ## Demonstration
 
 The package can be installed and loaded via:
@@ -169,7 +169,7 @@ closest_matches("aantal autos", "Welvaart", variable.names = TRUE)
 ```
 ## Execute the query
 
-Finally, you enter a number of variable names into `hdng_get_data` to retrieve a data.frame consisting of the actual variables: 
+Finally, you enter a number of variable names into `hdng_get_data` to retrieve a data.frame consisting of the actual variables. Please note that variable names are case-sensitive. 
 
 
 

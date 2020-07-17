@@ -71,9 +71,10 @@ closest_matches("aantal autos", "Welvaart", n = 20)
 
 closest_matches("aantal autos", "Welvaart", variable.names = TRUE)
 ```
+
 ## Execute the query
 
-Finally, you enter a number of variable names into `hdng_get_data` to retrieve a data.frame consisting of the actual variables: 
+Finally, you enter a number of variable names into `hdng_get_data` to retrieve a data.frame consisting of the actual variables. Please note that variable names are case-sensitive. 
 
 
 ```{r}
